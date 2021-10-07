@@ -1,0 +1,28 @@
+training:
+    batch_size: 128
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    epsilon: 8.
+    alpha: 2.
+    m: 10
+    pgd_repeat: 10
+    n_cls: 10
+    depth: 34
+    widen_factor: 10
+    dataset: 'cifar10'
+    image_size: 32
+    gamma: 2
+    
+evaluation:
+    epsilon: 8.
+    alpha: 2.
+    batch_size: 100
+    n_cls: 10
+    depth: 34
+    widen_factor: 10
+    pgd_repeat:
+        - 10
+        - 20
+    dataset: 'cifar10'
