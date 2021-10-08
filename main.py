@@ -16,6 +16,7 @@ from torchvision import datasets, transforms
 from advertorch.attacks import PGDAttack
 
 from utils import *
+from models.small_cnn import *
 from models.wideresnet import *
 
 def training(epoch, train_dataloader, model, xent, kl, optimizer, lambda_kl=6, num_classes=10, n_steps=10, epsilon=8/255, alpha=2/255):
@@ -169,12 +170,16 @@ if __name__ == '__main__':
         transforms.transforms.RandomHorizontalFlip(),
         transforms.ToTensor()
     ])
-    train_dataset = datasets.CIFAR10('/root/mnt/datasets/data', train=True, download=False, transform=train_transforms)
-    test_dataset = datasets.CIFAR10('/root/mnt/datasets/data', train=False, download=False, transform=transforms.ToTensor())
+    dataset_root = '/root/mnt/datasets/data'
+    train_dataset = datasets.__dict__[dataset.upper()](dataset_root, train=True, download=False, transform=train_transforms)
+    test_dataset = datasets.__dict__[dataset.upper()](dataset_root, train=False, download=False, transform=transforms.ToTensor())
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=multiprocessing.cpu_count())
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=multiprocessing.cpu_count())
     
-    model = nn.DataParallel(WideResNet(depth, num_classes, widen_factor, 0.3).cuda())
+    if dataset == 'mnist':
+        model = nn.DataParallel(SmallCNN().cuda())
+    else:
+        model = nn.DataParallel(WideResNet(depth, num_classes, widen_factor, 0.3).cuda())
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
     scheduler = [int(epochs*0.5), int(epochs*0.75)]
     adjust_learning_rate = lr_scheduler.MultiStepLR(optimizer, scheduler, gamma=0.1)

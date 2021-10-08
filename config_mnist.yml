@@ -1,0 +1,28 @@
+training:
+    batch_size: 128
+    epochs: 70
+    lr: 0.01
+    momentum: 0.9
+    weight_decay: 0.0002
+    epsilon: 80.
+    alpha: 20.
+    m: 10
+    pgd_repeat: 10
+    n_cls: 10
+    depth: 34
+    widen_factor: 10
+    dataset: 'mnist'
+    image_size: 28
+    gamma: 2
+    
+evaluation:
+    epsilon: 8.
+    alpha: 2.
+    batch_size: 100
+    n_cls: 10
+    depth: 34
+    widen_factor: 10
+    pgd_repeat:
+        - 10
+        - 20
+    dataset: 'mnist'
